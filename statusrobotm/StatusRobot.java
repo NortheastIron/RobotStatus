@@ -2,6 +2,7 @@ package statusrobotm;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Console;
 import java.sql.*;
 import java.sql.DriverManager;
 import java.util.Date;
@@ -35,21 +36,34 @@ public class StatusRobotM {
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
         StatusRobotM robot = new StatusRobotM(args[0]); 
+        //StatusRobotM robot = new StatusRobotM("2019-01-24"); //for IDE
         robot.go();
     }
     
     public void go(){
         
         try{
-        br =new BufferedReader(new InputStreamReader(System.in));
+        Console console = System.console();
+ 
+        if (console == null) {
+            System.out.println("Couldn't get Console instance");
+            System.exit(0);
+        }
+        /*br =new BufferedReader(new InputStreamReader(System.in));   //for IDE
         System.out.println("enter name database");
         nameDataBase = br.readLine();
         System.out.println("enter database user name");
         userName = br.readLine();
         System.out.println("enter database password");
-        userPassword = br.readLine();
+        userPassword = br.readLine();*/
+        
+        userName = console.readLine("Enter user name: ");         //for console
+        char tempInput[] = console.readPassword("Enter password: ");
+        userPassword = String.copyValueOf(tempInput);
+        nameDataBase = console.readLine("Enter name database: ");
         
         updateDataBase();
+        //br.close();
         }
         catch(Exception ex){
             ex.printStackTrace();
@@ -72,9 +86,7 @@ public class StatusRobotM {
         return DriverManager.getConnection("jdbc:mysql://localhost:3306/"
         +nameDataBase+"?serverTimezone=Asia/Novosibirsk&useSSL=true", userName, password);     
     }
-    
-    
-    
+      
 }
 class pageName{
     static String pageId = "";
@@ -106,6 +118,7 @@ class replenishmentDataBaseThread implements Runnable{
         }
         catch(Exception ex){
             ex.printStackTrace();
+            System.out.println("Invalid input");
         }
     }
     
@@ -120,6 +133,7 @@ class replenishmentDataBaseThread implements Runnable{
             String sql1 = "UPDATE sitetable SET date = '"+dateNow()+"' WHERE id = '"+rs.getString(1)+"';";
             Statement myStmt = connection.createStatement();
             myStmt.executeUpdate(sql1);
+           
             return output;
         }
         catch(Exception ex){
@@ -131,6 +145,7 @@ class replenishmentDataBaseThread implements Runnable{
     
     public boolean updateMethod(String date){
         String idUrl;
+        
         synchronized(res){
         idUrl = selectMethod(date);
         }
@@ -146,13 +161,13 @@ class replenishmentDataBaseThread implements Runnable{
                          +"' WHERE id = '"+tempIdUrl[0]+"';";
             
             try{
-            Statement myStmt = connection.createStatement();
-            myStmt.executeUpdate(sql);
-            
-            return true;
+                Statement myStmt = connection.createStatement();
+                myStmt.executeUpdate(sql);
+                
+                return true;
             }
             catch(Exception ex){
-            ex.printStackTrace();
+                ex.printStackTrace();
             
             return true;
             }
