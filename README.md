@@ -8,8 +8,8 @@ The program does not display any information after entering 3 key values
 
 Decryption of invalid statuses:
 
- Invalid HTTP Response = -1;
- Malformed URL = -999;
- Status check timeout = -998;
- Unexpected exception = -997;
- Status request = 0; (This status value can be fixed URL if during status request the program shuts down)
+    Invalid HTTP Response = -1;
+    Malformed URL = -999;
+    Status check timeout = -998;
+    Unexpected exception = -997;
+    Status request = 0; (This status value can be fixed URL if during status request the program shuts down)
