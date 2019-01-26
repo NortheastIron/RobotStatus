@@ -63,7 +63,7 @@ public class StatusRobotM {
         nameDataBase = console.readLine("Enter name database: ");
         
         updateDataBase();
-        //br.close();
+        //br.close(); //for IDE
         }
         catch(Exception ex){
             ex.printStackTrace();
@@ -130,7 +130,7 @@ class replenishmentDataBaseThread implements Runnable{
             ResultSet rs = getLine(connection, sql);
             rs.next();
             output = rs.getString(1) + " " + rs.getString(2);
-            String sql1 = "UPDATE sitetable SET date = '"+dateNow()+"' WHERE id = '"+rs.getString(1)+"';";
+            String sql1 = "UPDATE sitetable SET date = '"+dateNow()+"', status = '"+0+"' WHERE id = '"+rs.getString(1)+"';";
             Statement myStmt = connection.createStatement();
             myStmt.executeUpdate(sql1);
            
